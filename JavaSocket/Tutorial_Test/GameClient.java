@@ -149,8 +149,8 @@ class GameClient {
         while (true) {
             //String serverAddress = (args.length == 0) ? "localhost" : args[1];
             //GameClient client = new GameClient(serverAddress);
-            serverAddress="199.98.20.118";
-            GameClient client = new GameClient(serverAddress);
+            //serverAddress="199.98.20.118";
+            GameClient client = new GameClient("199.98.20.118");
             client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             client.frame.setSize(240, 160);
             client.frame.setVisible(true);
