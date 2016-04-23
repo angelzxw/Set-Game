@@ -6,7 +6,7 @@
         <title>JSP Example</title>
     </head>
     <body>
-        <form method="post" action="login.jsp">
+        <form method="post" action="refresh.jsp">
             <center>
             <table border="1" width="30%" cellpadding="3">
                 <thead>
@@ -26,6 +26,9 @@
                     <tr>
                         <td>Level</td>
                         <td><%=session.getAttribute("levelnum")%></td>
+                    </tr>
+                    <tr>
+                        	<th colspan="2"><input type="submit" value="Refresh"/></th>
                     </tr>
                    	<tr>
                         <td colspan="2"><a href='changePW.jsp'>Change Your Password</a></td>
