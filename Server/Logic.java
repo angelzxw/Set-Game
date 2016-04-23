@@ -83,4 +83,12 @@ public class Logic {
     public int getSetCount(ArrayList<ArrayList<Card>> setList) {
     	return setList.size();
     }
+    
+    public boolean noMoreSets(ArrayList<ArrayList<Card>> setList) {
+    	int setCount = getSetCount(setList);
+    	if(setCount > 0) {
+    		return false;
+    	}
+    	return true;
+    }
 }
