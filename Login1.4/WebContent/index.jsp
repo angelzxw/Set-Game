@@ -33,7 +33,7 @@
                         <td colspan="2">Yet Not Registered <a href="reg.jsp">Register Here</a></td>
                     </tr>
                     <tr>
-                        <td colspan="2">Yet Not Installed THe Game <a href="download.jsp">Download Here</a></td>
+                        <td colspan="2">Yet Not Installed The Game <a href="http://199.98.20.118:8010/GamePackage.zip">Download Here</a></td>
                     </tr>
                 </tbody>
             </table>
