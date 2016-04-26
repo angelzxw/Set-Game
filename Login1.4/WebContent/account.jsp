@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Example</title>
+        <title>Account Summary</title>
     </head>
     <body>
         <form method="post" action="refresh.jsp">
@@ -32,6 +32,9 @@
                     </tr>
                    	<tr>
                         <td colspan="2"><a href='changePW.jsp'>Change Your Password</a></td>
+                    </tr>
+                    <tr>
+                    	<td colspan="2"><a href='accountRM.jsp'>Remove Your Account From The System</a></td>
                     </tr>
                     <tr>
                         <td colspan="2"> <a href='logout.jsp'>Log out</a></td>

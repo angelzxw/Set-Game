@@ -3,34 +3,27 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Reset Password</title>
+        <title>Delete Account</title>
     </head>
     <body>
-        <form method="post" action="changeMyPW.jsp">
+        <form method="post" action="delete.jsp">
             <center>
             <table border="1" width="30%" cellpadding="3">
                 <thead>
                     <tr>
-                        <th colspan="2">Reset Password Here</th>
+                        <th colspan="2">Are You Sure To Remove Your Account?</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <%//<tr>
-                        //<td>User Name</td>
-                        //<td><input type="text" name="uname" value="" /></td>
-                    //</tr> %>
+                   <tr>
+                        <td>Enter Your Email Again</td>
+                        <td><input type="text" name="email" value="" /></td>
+                    </tr>
                     <tr>
-                        <td>Current Password</td>
+                        <td>Enter Your Password Again</td>
                         <td><input type="password" name="pass" value="" /></td>
                     </tr>
-                    <tr>
-                        <td>New Password</td>
-                        <td><input type="password" name="new_password" value="" /></td>
-                    </tr>
-                    <tr>
-                        <td>Confirm Your Password</td>
-                        <td><input type="password" name="new_password2" value="" /></td>
-                    </tr>
+               
                     <tr>
                         <th colspan="2"><input type="submit" value="Submit" /></th>
                     </tr>
@@ -38,7 +31,7 @@
                     	<td colspan="2"> <a href='account.jsp'>View Your Account Summary</a></td>
                     </tr>
                     <tr>
-                    	<td colspan="2"><a href='accountRM.jsp'>Remove Your Account From The System</a></td>
+                        <td colspan="2"><a href='changePW.jsp'>Change Your Password</a></td>
                     </tr>
                     <tr>
                     	<td colspan="2"> <a href='logout.jsp'>Log out</a></td>

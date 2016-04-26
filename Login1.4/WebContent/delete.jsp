@@ -1,7 +1,8 @@
 <%@ page import ="java.sql.*" %>
 <%
-    String user = request.getParameter("uname");    
+    String user = (String) session.getAttribute("userid");    
     String pwd = request.getParameter("pass");
+    String email = request.getParameter("email");
     
 	Connection con = null;
 	try {
@@ -10,21 +11,17 @@
 				"TDguest", "TDpass");
 		Statement st = con.createStatement();
 		ResultSet rs; 	
-		rs = st.executeQuery("select * from members where uname='" + user + "' and pass='" + pwd + "'");
+		rs = st.executeQuery("select * from members where uname='" + user + "' and email = '"+email+"' and pass='" + pwd + "'");
 		if (rs.next()) {
 			
-			int hscore = rs.getInt("score");
-			String leveln = rs.getString("level");
-			
-			session.setAttribute("userid", user);
-			session.setAttribute("info", hscore);
-			session.setAttribute("levelnum", leveln);
+			st.executeUpdate("delete from members where uname='" + user + "'");
+			//session.setAttribute("userid", user);
 			//out.println("welcome " + userid);
 			//out.println("<a href='logout.jsp'>Log out</a>");
-			response.sendRedirect("success.jsp");
-			
+			response.sendRedirect("logout.jsp");
+			//response.sendRedirect("successRM.jsp");
 		} else {
-			out.println("Invalid Username or Password,  <a href='index.jsp'>Try Again</a>");
+			out.println("Invalid password <a href='accountRM.jsp'>try again</a>");
 		}
 		rs.close();
 		st.close();

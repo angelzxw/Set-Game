@@ -6,8 +6,9 @@
     String lname = request.getParameter("lname");
     String email = request.getParameter("email");
     
-	if ((user!= null && !user.isEmpty()) || (pwd != null && !pwd.isEmpty()) || (fname != null && !fname.isEmpty()) || (lname != null && !lname.isEmpty())) {
-		out.println("Invalid Inputs <a href='reg.jsp'>try again</a>");
+	if ((user != null && user.isEmpty()) || (pwd !=null && pwd.isEmpty()) || (fname != null && fname.isEmpty()) || (lname !=null && lname.isEmpty())) {
+		//System.out.println(user+" "+pwd+" "+" "+fname+" "+lname +" "+email);
+		out.println("You have Empty Inputs or Invalid Inputs <a href='reg.jsp'>try again</a>");
 	} else {
 		Connection con = null;
 		//if (!con.isClosed()){

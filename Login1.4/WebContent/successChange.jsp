@@ -1,6 +1,6 @@
 <%
 %>
-<%=session.getAttribute("userid")%> You Have Updated Your Password!
+<B><I><%=session.getAttribute("userid")%></I></B>, You Have Updated Your Password!
 <br/>
 <a href='account.jsp'>View Your Account Summary</a>
 <br/>

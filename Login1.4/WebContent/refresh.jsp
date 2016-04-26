@@ -1,6 +1,6 @@
 <%@ page import ="java.sql.*" %>
 <%
-    String user = (String )session.getAttribute("userid");    
+    String user = (String) session.getAttribute("userid");    
     //String pwd = request.getParameter("pass");
     
 	Connection con = null;
