@@ -1,21 +1,40 @@
-package game.set;
+/*
+ *  Card.java
+ *  
+ *  Class used to implement a card object.
+ *  Stores the card's fields, namely its number,
+ *  symbol, shading, and color.
+ *  
+ */
+
+package set.server.game;
 
 public class Card {
 
-	// Card fields
+	/*****************/
+	/** Card fields **/
+	/*****************/
+	
 	protected int number;
 	protected int symbol;
 	protected int shading;
 	protected int color;
 	
-	// Card constructor
+	/**********************/
+	/** Card constructor **/
+	/**********************/
+	
 	public Card(int newNum, int newSym, int newShad, int newCol) {
 		number = newNum;
 		symbol = newSym;
 		shading = newShad;
 		color = newCol;
 	}
-		
+	
+	/******************/
+	/** Card methods **/
+	/******************/
+	
 	// Card overwritten hashCode
 	public int hashCode() {
 		final int prime = 31;
@@ -47,22 +66,11 @@ public class Card {
 		return true;
 	}
 
-	/*
-	public boolean equals(Card card) {
-		if( (this.number == card.number) &&
-			(this.symbol == card.symbol) &&
-			(this.shading == card.shading) &&
-			(this.color == card.color) ) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	*/
-
-	// Card toString
+	// Card overwritten toString
 	public String toString() {
-		return number + " " + symbol + " " + shading + " " + color + '\n';
+		String cardID = Integer.toString(number) + Integer.toString(symbol)
+						+ Integer.toString(shading) + Integer.toString(color);
+		return cardID;
 	}
+	
 }

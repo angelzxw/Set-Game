@@ -1,16 +1,22 @@
-package game.set;
+package set.server.game;
 
 import java.util.ArrayList;
 
-public class Logic {
+public class GameLogic {
 	
-	// Logic fields
+	/**********************/
+	/** GameLogic fields **/
+	/**********************/
+	
 	protected ArrayList<Card> CompleteCardList;
 	protected ArrayList<ArrayList<Card>> SetList, CompleteSetList;
 	protected int CompleteSetCount;
 	
-	// Logic constructor
-	public Logic() {
+	/***************************/
+	/** GameLogic constructor **/
+	/***************************/
+	
+	public GameLogic() {
 		
 		CompleteCardList = new ArrayList<Card>();		
 		
@@ -25,11 +31,16 @@ public class Logic {
 			}
 		}
 		
+		// Get complete list of sets and complete set count (debug)
 		CompleteSetList = getSets(CompleteCardList);
 		CompleteSetCount = getSetCount(CompleteSetList);
 	}
 	
-	// Logic methods
+	/***********************/
+	/** GameLogic methods **/
+	/***********************/
+	
+	// Check if triplet is a set
     public boolean isSet(Card a, Card b, Card c) {
     	
     	if( ((a.number == b.number) && (b.number == c.number)) ||
@@ -53,37 +64,43 @@ public class Logic {
     	return false;
     }
     
-    // gets all possible sets from the playing field or in total
+    // Get possible sets from the playing field or in total
     public ArrayList<ArrayList<Card>> getSets(ArrayList<Card> pool) {
     	
     	ArrayList<ArrayList<Card>> setList = new ArrayList<ArrayList<Card>>();
-    	if(pool == null) return setList;
     	
-    	int poolSize = pool.size();
-    	for(int ia = 0; ia < poolSize; ia++) {
-    		Card a = pool.get(ia);
-    		for(int ib = ia + 1; ib < poolSize; ib++) {
-    			Card b = pool.get(ib);
-    			for(int ic = ib + 1; ic < poolSize; ic++) {
-    				Card c = pool.get(ic);
-    				if(isSet(a, b, c)) {
-    					ArrayList<Card> set = new ArrayList<Card>();
-    					set.add(a);
-    					set.add(b);
-    					set.add(c);
-    					setList.add(set);
-    				}
-    			}
-    		}
+    	synchronized(pool) {
+    		
+	    	if(pool == null) return setList;
+	    	
+	    	int poolSize = pool.size();
+	    	for(int ia = 0; ia < poolSize; ia++) {
+	    		Card a = pool.get(ia);
+	    		for(int ib = ia + 1; ib < poolSize; ib++) {
+	    			Card b = pool.get(ib);
+	    			for(int ic = ib + 1; ic < poolSize; ic++) {
+	    				Card c = pool.get(ic);
+	    				if(isSet(a, b, c)) {
+	    					ArrayList<Card> set = new ArrayList<Card>();
+	    					set.add(a);
+	    					set.add(b);
+	    					set.add(c);
+	    					setList.add(set);
+	    				}
+	    			}
+	    		}
+	    	}
     	}
     	
     	return setList;
     }
     
+    // Get number of sets from playing field or in total
     public int getSetCount(ArrayList<ArrayList<Card>> setList) {
     	return setList.size();
     }
     
+    // Check if any more sets on field
     public boolean noMoreSets(ArrayList<ArrayList<Card>> setList) {
     	int setCount = getSetCount(setList);
     	if(setCount > 0) {
