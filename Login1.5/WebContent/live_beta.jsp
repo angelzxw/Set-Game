@@ -6,7 +6,7 @@
         <title>Live</title>
     </head>
     <body>
-    <form method="post" action="../../../../../Documents/Unnamed Site 2/refresh.jsp">
+    <form method="post" action="refresh2.jsp">
             <center>
             <table border="1" width="30%" cellpadding="5">
                 <thead>
@@ -16,30 +16,30 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th width="40%"></th>
-                      <th width="29%"><%=session.getAttribute("userid_1")%></th>
-                        <th width="31%"><%=session.getAttribute("userid_2")%></th>
+                        <th></th>
+                      <th width="29%"><%=session.getAttribute("userid")%> VS  
+                      <%=session.getAttribute("userid_2")%></th>
                         
                   </tr>
                     <tr>
                         <th>Current Score</th>
-                      <td><%=session.getAttribute("score_1")%></td>
-                        <td><%=session.getAttribute("score_1")%></td>
+                      <td><%=session.getAttribute("info")%></td>
+                        <td><%=session.getAttribute("info_2")%></td>
                   </tr>
                     <tr>
                         <th>History Wins</th>
-                      <td><%=session.getAttribute("numW_1")%> / <%=session.getAttribute("totGame_1")%></td>
+                      <td><%=session.getAttribute("numW")%> / <%=session.getAttribute("totGame")%></td>
                         <td><%=session.getAttribute("numW_2")%> / <%=session.getAttribute("totGame_2")%></td>
                   </tr>
                     <tr>
                         <th>Highest Score</th>
-                      <td><%=session.getAttribute("hiscore_1")%></td>
+                      <td><%=session.getAttribute("hiscore")%></td>
                         <td><%=session.getAttribute("hiscore_2")%></td>
                   </tr>
                     <tr>
                         <th>Win Chance</th>
-                      <td><%=session.getAttribute("winchan_1")%></td>
-                        <td><%=session.getAttribute("winchan_2")%></td>
+                      <td><%=session.getAttribute("winchan")%> % </td>
+                        <td><%=session.getAttribute("winchan_2")%> % </td>
                   </tr>
                     <tr>
                     	<th colspan="3"><div align="center">
