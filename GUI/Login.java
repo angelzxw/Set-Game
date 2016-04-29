@@ -98,12 +98,17 @@ public class Login extends JFrame  implements ActionListener{
 				Connection con = null;
 				try {
 					Class.forName("com.mysql.jdbc.Driver").newInstance();
-					String url = "jdbc:mysql://199.98.20.118:3306/TestDatabase";
+					String url = "jdbc:mysql://199.98.20.121/TestDatabase";
 					con = DriverManager.getConnection(url, "TDguest", "TDpass");
 					Statement st = con.createStatement();
 					ResultSet rs; 	
+					
+					if (con != null){
+						System.out.println("connecting");
+					}
 					rs = st.executeQuery("select * from members where uname='" + username + "' and pass='" + pwd + "'");
 					if (rs.next()) {
+				
 						//check if logged in already
 						int check = rs.getInt("LoggedIn");
 						if (check==0){
@@ -122,7 +127,7 @@ public class Login extends JFrame  implements ActionListener{
 							st.executeUpdate("update members set InGame='0' where uname='" + username + "'");
 							st.executeUpdate("update members set score='0' where uname='" + username + "'");
 							
-							System.out.println(rs.getInt("LoggedIn") +" " +rs.getInt("InGame") +" "+ rs.getInt("score"));
+							//System.out.println(rs.getInt("LoggedIn") +" " +rs.getInt("InGame") +" "+ rs.getInt("score"));
 							
 							LoggedIn = true;
 							InGame = false;
