@@ -11,18 +11,18 @@
             <table border="1" width="30%" cellpadding="5">
                 <thead>
                     <tr>
-                        <th colspan="3"><%=session.getAttribute("userid")%></th>
+                        <th colspan="3"><%=session.getAttribute("userid_1")%></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <th>History Wins</th>
-                      <td><%=session.getAttribute("numW")%> / <%=session.getAttribute("totGame")%></td>
+                        <th>Win Rate</th>
+                      <td><%=session.getAttribute("numW_1")%> / <%=session.getAttribute("totGame_1")%></td>
                         
                   </tr>
                     <tr>
                         <th>Highest Score</th>
-                      <td><%=session.getAttribute("hiscore")%></td>
+                      <td><%=session.getAttribute("hiscore_1")%></td>
                         
                   </tr>
                   <tr>

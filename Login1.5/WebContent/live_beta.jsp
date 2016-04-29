@@ -17,28 +17,28 @@
                 <tbody>
                     <tr>
                         <th></th>
-                      <th width="29%"><%=session.getAttribute("userid")%> VS  
+                      <th width="29%"><%=session.getAttribute("userid_1")%> VS  
                       <%=session.getAttribute("userid_2")%></th>
                         
                   </tr>
                     <tr>
                         <th>Current Score</th>
-                      <td><%=session.getAttribute("info")%></td>
+                      <td><%=session.getAttribute("info_1")%></td>
                         <td><%=session.getAttribute("info_2")%></td>
                   </tr>
                     <tr>
                         <th>History Wins</th>
-                      <td><%=session.getAttribute("numW")%> / <%=session.getAttribute("totGame")%></td>
+                      <td><%=session.getAttribute("numW_1")%> / <%=session.getAttribute("totGame_1")%></td>
                         <td><%=session.getAttribute("numW_2")%> / <%=session.getAttribute("totGame_2")%></td>
                   </tr>
                     <tr>
                         <th>Highest Score</th>
-                      <td><%=session.getAttribute("hiscore")%></td>
+                      <td><%=session.getAttribute("hiscore_1")%></td>
                         <td><%=session.getAttribute("hiscore_2")%></td>
                   </tr>
                     <tr>
                         <th>Win Chance</th>
-                      <td><%=session.getAttribute("winchan")%> % </td>
+                      <td><%=session.getAttribute("winchan_1")%> % </td>
                         <td><%=session.getAttribute("winchan_2")%> % </td>
                   </tr>
                     <tr>

@@ -6,7 +6,7 @@
 	Connection con = null;
 	try {
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		con = DriverManager.getConnection("jdbc:mysql://199.98.20.118:3306/TestDatabase",
+		con = DriverManager.getConnection("jdbc:mysql:/localhost:3306/TestDatabase",
 				"TDguest", "TDpass");
 		Statement st = con.createStatement();
 		ResultSet rs; 	
@@ -21,13 +21,13 @@
 			int InGame = rs.getInt("InGame");
 			int user2 = rs.getString("PLY2uname");
 			
-			session.setAttribute("userid", user);
-			session.setAttribute("info", currentsc);
-			session.setAttribute("levelnum", leveln);
-			session.setAttribute("hiscore", hscore);
-			session.setAttribute("numW", numWin);
-			session.setAttribute("totGame", totalGame);
-			session.setAttribute("ingame", InGame);
+			session.setAttribute("userid_1", user);
+			session.setAttribute("info_1", currentsc);
+			session.setAttribute("levelnum_1", leveln);
+			session.setAttribute("hiscore_1", hscore);
+			session.setAttribute("numW_1", numWin);
+			session.setAttribute("totGame_1", totalGame);
+			session.setAttribute("ingame_1", InGame);
 			session.setAttribute("userid_2", user2);
 			
 			response.sendRedirect("searchRS.jsp");

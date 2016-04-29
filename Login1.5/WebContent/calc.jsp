@@ -1,14 +1,14 @@
 <%
-    if ((session.getAttribute("InGame") == 0) {
+    if ((session.getAttribute("ingame_1") == 0) {
 %>
-<B><I><%=session.getAttribute("userid")%></I></B> currently is not playing<br/>
+<B><I><%=session.getAttribute("userid_1")%></I></B> currently is not playing<br/>
 <a href="index.jsp">Go Back</a>
 <%} else {
 	String userid_2 = (String) session.getAttribute("userid_2");
 	Connection con = null;
 	try {
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		con = DriverManager.getConnection("jdbc:mysql://199.98.20.118:3306/TestDatabase",
+		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TestDatabase",
 				"TDguest", "TDpass");
 		Statement st = con.createStatement();
 		ResultSet rs; 	
@@ -30,13 +30,13 @@
 			session.setAttribute("numW_2", numWin);
 			session.setAttribute("totGame_2", totalGame);
 			
-			double rate = ((int) session.getAttribute("numW"))/((int) session.getAttribute("totGame"));
+			double rate = ((int) session.getAttribute("numW_1"))/((int) session.getAttribute("totGame_1"));
 			double rate_2 = numWin_2/totalGame_2;
 			
 			int prob = rate/(rate + rate_1) * 100;
 			int prob_2 = 100 - prob;
 			
-			session.setAttribute("winchan2", prob);
+			session.setAttribute("winchan_1", prob);
 			session.setAttribute("winchan_2", prob_2);
 			//session.setAttribute("ingame_2", InGame);
 			//session.setAttribute("userid_2", user2);
