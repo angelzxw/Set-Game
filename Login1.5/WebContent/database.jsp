@@ -3,7 +3,7 @@
 	Connection con = null;
 	try {
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TestDatabase",
+		con = DriverManager.getConnection("jdbc:mysql://199.98.20.121:3306/TestDatabase",
 				"TDguest", "TDpass");
 		Statement st = con.createStatement();
 		//int count;
@@ -37,5 +37,5 @@
   //`level` int(10) unsigned NOT NULL,
   //`regdate` date NOT NULL,
   // PRIMARY KEY  (`id`)
-// ENGINE=InnoDB DEFAULT CHARSET=latin1;
+// )ENGINE=InnoDB DEFAULT CHARSET=latin1;
  %>

@@ -17,7 +17,7 @@
 			try {
 				
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TestDatabase",
+				con = DriverManager.getConnection("jdbc:mysql://199.98.20.121:3306/TestDatabase",
 						"TDguest", "TDpass");
 				
 				//if (!con.isClosed())

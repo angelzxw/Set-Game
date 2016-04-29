@@ -7,7 +7,7 @@
 	Connection con = null;
 	try {
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		con = DriverManager.getConnection("jdbc:mysql://localhost/TestDatabase",
+		con = DriverManager.getConnection("jdbc:mysql://199.98.20.121/TestDatabase",
 				"TDguest", "TDpass");
 		Statement st = con.createStatement();
 		ResultSet rs; 	

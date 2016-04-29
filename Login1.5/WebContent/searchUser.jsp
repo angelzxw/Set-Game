@@ -6,7 +6,7 @@
 	Connection con = null;
 	try {
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		con = DriverManager.getConnection("jdbc:mysql:/localhost:3306/TestDatabase",
+		con = DriverManager.getConnection("jdbc:mysql://199.98.20.121:3306/TestDatabase",
 				"TDguest", "TDpass");
 		Statement st = con.createStatement();
 		ResultSet rs; 	
@@ -15,11 +15,11 @@
 			
 			int hscore = rs.getInt("highscore");
 			String leveln = rs.getString("level");
-			int currentsc = rs.getInt("info");
+			int currentsc = rs.getInt("score");
 			int numWin = rs.getInt("numWins");
 			int totalGame = rs.getInt("totalGames");
 			int InGame = rs.getInt("InGame");
-			int user2 = rs.getString("PLY2uname");
+			String user2 = rs.getString("PLY2uname");
 			
 			session.setAttribute("userid_1", user);
 			session.setAttribute("info_1", currentsc);
@@ -33,10 +33,10 @@
 			response.sendRedirect("searchRS.jsp");
 			
 		} else {
-			out.println("Invalid password <a href='index.jsp'>try again</a>");
+			out.println("NOT FOUND <a href='index.jsp'>try again</a>");
 		}
 		rs.close();
-		s.close();
+		st.close();
 	} catch (Exception e){
 			System.out.println("Exception: " + e.getMessage());
 	} finally{

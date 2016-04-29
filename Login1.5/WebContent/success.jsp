@@ -15,6 +15,8 @@ Welcome, <B><I> <%=session.getAttribute("userid")%></I></B>
 <br/>
 <a href="tutorial.jsp">Watch Game Tutorial Here</a>
 <br/>
+<a href="search.jsp">Search Player</a>
+<br/>
 <a href='logout.jsp'>Log out</a>
 <%
     }

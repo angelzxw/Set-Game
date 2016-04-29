@@ -25,9 +25,7 @@
                       <td><%=session.getAttribute("hiscore_1")%></td>
                         
                   </tr>
-                  <tr>
-                        <th colspan="3"><div align="center"><a href="calc.jsp">Watch LIVE?</a></div></th>
-                    </tr>
+       
                     <tr>
                         <th colspan="3"><div align="center"><a href="index.jsp">Exit</a></div></th>
                     </tr>

@@ -17,7 +17,9 @@
                 <tbody>
                    
                    <tr>
-                        <td><input type="text" name="uname_1" value="" /></td>
+                   
+                        <td><center><input type="text" name="uname_1" value="" /></center></td>
+                   
                    </tr>
                     
                    <tr>
