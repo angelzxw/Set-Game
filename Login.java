@@ -87,7 +87,7 @@ public class Login extends JFrame  implements ActionListener{
 					Statement st = con.createStatement();
 					ResultSet rs; 	
 
-					rs = st.executeQuery("select * from members where uname='" + username + "' and pass='" + pwd + "'");
+					rs = st.executeQuery("select * from members where uname='" + username + "'");
 					if (rs.next()) {
 							st.executeUpdate("update members set LoggedIn='0' where uname='" + username + "'");
 					} 
