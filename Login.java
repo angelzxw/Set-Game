@@ -8,7 +8,7 @@ public class Login extends JFrame  implements ActionListener{
 	
 	private Container CT;
 	private JButton btn, btn2;
-	private JLabel uname, pwd_1, errmeg;
+	private JLabel uname, pwd, errmeg;
 	private JTextField t1;
 	private JPasswordField t2;
 	private JPanel p, p0, p1, p2, p3;
@@ -17,7 +17,7 @@ public class Login extends JFrame  implements ActionListener{
 	boolean LoggedIn = false;
 	boolean InGame = false;
 	
-	String username, pwd;
+	String username;
 	
 	public Login(String title){
 		super(title);
@@ -43,7 +43,7 @@ public class Login extends JFrame  implements ActionListener{
 		btn2.setPreferredSize(new Dimension(100, 30));
 		
 		uname= new JLabel("Username: ", JLabel.RIGHT);
-	    pwd_1 = new JLabel("Password: ", JLabel.RIGHT);
+	    pwd = new JLabel("Password: ", JLabel.RIGHT);
 	    //errmeg = new JLabel("Incorrect Username or Password!", JLabel.CENTER);
 	    errmeg = new JLabel();
 	    
@@ -62,7 +62,7 @@ public class Login extends JFrame  implements ActionListener{
 		p1.add(uname);
 		p1.add(t1);
 		
-		p2.add(pwd_1);
+		p2.add(pwd);
 		p2.add(t2);
 
 		p3.add(btn);
@@ -126,7 +126,7 @@ public class Login extends JFrame  implements ActionListener{
 			
 			//implement login function here!
 			username = t1.getText();
-			pwd = t2.getText();
+			String pwd = t2.getText();
 			//System.out.println(pwd);
 			
 			if(!username.isEmpty() && !pwd.isEmpty()){
