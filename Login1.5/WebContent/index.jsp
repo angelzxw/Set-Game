@@ -33,7 +33,7 @@
                         <td colspan="2">Not Yet Registered? <a href="reg.jsp">Register Here</a></td>
                     </tr>
                     <tr>
-                        <td colspan="2">Haven't Installed The Game? <a href="http://199.98.20.121:8010/GamePackage.zip">Download Here</a></td>
+                        <td colspan="2">Haven't Installed The Game? </br><a href="http://199.98.20.121:8010/GamePackage.zip">Mac/Linux Version</a> <a href="http://199.98.20.121:8010/GamePackage_Win.zip">   Win Version</a></td>
                     </tr>
                     <tr>
                         <td colspan="2">Game Tutorial <a href="tutorial.jsp">Start Here</a></td>

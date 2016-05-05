@@ -33,6 +33,9 @@
                     <tr>
                         <td colspan="2"><a href='changePW.jsp'>Change Your Password</a></td>
                     </tr>
+                     <tr>
+                        <td colspan="2"><a href='unlock.jsp'>Unlock Your Account</a></td>
+                    </tr>
                     <tr>
                         <td colspan="2"><a href="tutorial.jsp">Game Tutorial Here</a></td>
                     </tr>

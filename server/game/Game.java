@@ -32,10 +32,12 @@ public class Game {
 	
 	public GameServerThread host;
 	public int hostUID;
+	public String hostName;
 	public String gameName;
 	
 	public List<GameServerThread> ClientsInGame = Collections.synchronizedList(new LinkedList<GameServerThread>());
-	public GameServerThread winner;
+	public GameServerThread victor;
+	public String victorName;
 	
 	/**********************/
 	/** Game constructor **/
@@ -46,6 +48,7 @@ public class Game {
 		// Get host user ID and name of game
 		this.host = host;
 		hostUID = host.GetUserID();
+		hostName = host.GetUsername();
 		this.gameName = gameName;
 		
 		// Instantiate deck and playing field
@@ -63,14 +66,21 @@ public class Game {
 			}
 		}
 		
+		// For debugging, leave only 12 cards in deck
+		/*
+		while(Deck.size() > 12) {
+			Deck.pop();
+		}
+		*/
+		
 		// Shuffle deck
 		Collections.shuffle(Deck);
 		
 		// Deal 12 cards
-		//Deal(12);
+		Deal(12);
 	}
 	
-	// Constructor without arguments, for debugging
+	// Constructor without arguments, for solitaire/debugging
 	public Game() {
 			
 		// Instantiate deck and playing field
@@ -88,11 +98,16 @@ public class Game {
 			}
 		}
 		
+		// For debugging, leave only 12 cards in deck
+		/*
+		 * while(Deck.size() > 12) { Deck.pop(); }
+		 */
+		
 		// Shuffle deck
 		Collections.shuffle(Deck);
 		
 		// Deal 12 cards
-		//Deal(12);
+		Deal(12);
 	}
 	
 	/******************/
@@ -118,6 +133,13 @@ public class Game {
 		}
 	}
 	
+	// Update game board when set has been found
+	public void UpdateBoard(Card card1, Card card2, Card card3) {
+		ReplaceCard(card1);
+		ReplaceCard(card2);
+		ReplaceCard(card3);
+	}
+	
 	// Replace a card on the field with one from the deck
 	public void ReplaceCard(Card card) {
 		synchronized(Board) {
@@ -133,8 +155,8 @@ public class Game {
 	// Remove a card from the field
 	public void RemoveCard(Card card) {
 		synchronized(Board) {
-			//Board.set(Board.indexOf(card), new Card(0,0,0,0));
-			Board.remove(Board.indexOf(card));
+			Board.set(Board.indexOf(card), new Card(0,0,0,0));
+			//Board.remove(Board.indexOf(card));
 		}
 	}
 	
@@ -162,11 +184,11 @@ public class Game {
 	/************************/
 	
 	// Get player in game from user ID
-	public GameServerThread GetPlayer(int userID) {
+	public GameServerThread GetPlayer(String username) {
 		synchronized(ClientsInGame) {
 			for(Iterator<GameServerThread> clientItr = ClientsInGame.listIterator(); clientItr.hasNext();) {
 				GameServerThread client = clientItr.next();
-				if(client.GetUserID() == userID) {
+				if(client.GetUsername().equals(username)) {
 					return client;
 				}
 			}
@@ -178,7 +200,7 @@ public class Game {
 	public void AddPlayer(GameServerThread client) {
 		synchronized(ClientsInGame) {
 			// check if player is already in lobby 
-			if(GetPlayer(client.GetUserID()) == null) {
+			if(GetPlayer(client.GetUsername()) == null) {
 				ClientsInGame.add(client);
 			}
 		}
@@ -197,19 +219,25 @@ public class Game {
 		}
 	}
 	
-	// End game and remove all clients in the game
-	public void EndGame() {
-		synchronized(ClientsInGame) {
-			
-			// get the winner from the game
-			int highestScore = 0;
-			for(Iterator<GameServerThread> clientItr = ClientsInGame.listIterator(); clientItr.hasNext();) {
-				GameServerThread client = clientItr.next();
-				int clientScore = client.GetScore();
-				if(clientScore > highestScore) {
-					winner = client;
-				}
+	// Get winner of the game
+	public String GetWinner() {
+		// get the winner from the game
+		int highestScore = 0;
+		for (Iterator<GameServerThread> clientItr = ClientsInGame.listIterator(); clientItr.hasNext();) {
+			GameServerThread client = clientItr.next();
+			int clientScore = client.GetScore();
+			if (clientScore > highestScore) {
+				victor = client;
+				victorName = victor.GetUsername();
 			}
+		}
+		return victorName;
+	}
+	
+	// End game and update stats
+	public void EndGame() {
+		
+		synchronized(ClientsInGame) {
 			
 			// update stats for all players
 			for(Iterator<GameServerThread> clientItr = ClientsInGame.listIterator(); clientItr.hasNext();) {
@@ -217,7 +245,7 @@ public class Game {
 				
 				client.IncreaseTotalGameCount();
 				
-				if(client == winner) {
+				if(client == victor) {
 					client.IncreaseWinCount();
 				}
 				
@@ -226,14 +254,106 @@ public class Game {
 				if(clientScore > client.GetHighScore()) {
 					client.UpdateHighScore(clientScore);
 				}
-					
-				client.SaveStats(); // save statistics associated with client
-				clientItr.remove(); // remove all clients from game
-				client.AddPlayerToLobby(); // add clients back to lobby
 				
+				client.sendPacket.SaveStats(client.GetWinCount(), client.GetTotalGameCount(), client.GetHighScore());
+				
+				//client.SaveStats(); // save statistics associated with client
+				//clientItr.remove(); // remove all clients from game
+				//client.AddPlayerToLobby(); // add clients back to lobby	
 			}
 		}
-		
 	}
 	
+	/********************************************/
+	/** Packet broadcasting to clients in game **/
+	/********************************************/
+	
+	/*******************/
+	/** Game messages **/
+	/*******************/
+	
+	public void BroadcastPlayerFoundSet(String username) {
+		synchronized(ClientsInGame) {
+			for(Iterator<GameServerThread> clientItr = ClientsInGame.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				if(client.GetUsername() == username) {
+					client.sendPacket.GameMessageYouFoundSet();
+				} else {
+					client.sendPacket.GameMessageOtherPlayerFoundSet(username);
+				}
+			}
+		}
+	}
+	
+	public void BroadcastGameOver() {
+		synchronized(ClientsInGame) {
+			for(Iterator<GameServerThread> clientItr = ClientsInGame.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				if(client.GetUsername().equals(victorName)) {
+					client.sendPacket.GameMessageYouWon();
+				} else {
+					client.sendPacket.GameMessageOtherPlayerWon(victorName);
+				}
+			}
+		}
+	}
+	
+	/************************/
+	/** Game board updates **/
+	/************************/
+	
+	public void BroadcastInitialDeal() {
+		synchronized(ClientsInGame) {
+			for(Iterator<GameServerThread> clientItr = ClientsInGame.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				client.sendPacket.CardUpdateInitialDeal(client.GetGame().boardString());
+			}
+		}
+	}
+	
+	public void BroadcastAddCards(int boardSize, String cardString) {
+		synchronized(ClientsInGame) {
+			for(Iterator<GameServerThread> clientItr = ClientsInGame.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				client.sendPacket.CardUpdateAddCards(boardSize, cardString);
+			}
+		}
+	}
+	
+	public void BroadcastReplaceCards(int card1Pos, int card2Pos, int card3Pos, String cardString) {
+		synchronized(ClientsInGame) {
+			for(Iterator<GameServerThread> clientItr = ClientsInGame.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				client.sendPacket.CardUpdateReplaceCards(card1Pos, card2Pos, card3Pos, cardString);
+			}
+		}
+	}
+	
+	/*************************/
+	/** Updating player list **/
+	/*************************/
+	
+	public void BroadcastRemovePlayer(String username) {
+		synchronized(ClientsInGame) {
+			for(Iterator<GameServerThread> clientItr = ClientsInGame.listIterator();
+					clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				client.sendPacket.GameRoomUpdateRemovePlayer(username);
+			}
+		}
+	}
+	
+	/**************/
+	/** Chatting **/
+	/**************/
+	
+	public void BroadcastChatInGame(String message) {
+		synchronized(ClientsInGame) {
+			for(Iterator<GameServerThread> clientItr = ClientsInGame.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				client.sendPacket.ChatMessageInGame(message);
+			}
+		}
+	}
+
 }

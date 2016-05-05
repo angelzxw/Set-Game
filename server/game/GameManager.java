@@ -29,11 +29,11 @@ public class GameManager {
 	/*************************/
 	
 	// Fetch active game associated with host's user ID
-	public Game GetGame(int hostUID) {
+	public Game GetGame(String hostName) {
 		synchronized(GamesInProgress) {
 			for(Iterator<Game> gameItr = GamesInProgress.listIterator(); gameItr.hasNext();) {
 				Game game = gameItr.next();
-				if(game.hostUID == hostUID) {
+				if(game.hostName.equals(hostName)) {
 					return game;
 				}
 			}
@@ -45,19 +45,19 @@ public class GameManager {
 	public void AddGame(GameServerThread host, String gameName) {
 		synchronized(GamesInProgress) {
 			// check if host already has game
-			if(GetGame(host.GetUserID()) == null) {
-				Game newGame = new Game(host, gameName);
-				GamesInProgress.add(newGame);
+			if(GetGame(host.GetUsername()) == null) {
+				Game game = new Game(host, gameName);
+				GamesInProgress.add(game);
 			}
 		}
 	}
 	
 	// Delete game from list of currently active games
-	public void RemoveGame(int hostUID) {
+	public void RemoveGame(String hostName) {
 		synchronized(GamesInProgress) {
 			for(Iterator<Game> gameItr = GamesInProgress.listIterator(); gameItr.hasNext();) {
 				Game game = gameItr.next();
-				if(game.hostUID == hostUID) {
+				if(game.hostName.equals(hostName)) {
 					synchronized(game) {
 						// remove all players from game
 						for(Iterator<GameServerThread> clientItr = game.ClientsInGame.listIterator(); clientItr.hasNext();) {

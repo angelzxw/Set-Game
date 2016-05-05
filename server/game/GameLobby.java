@@ -23,6 +23,7 @@ public class GameLobby {
 	/** GameLobby fields **/
 	/**********************/
 
+	// For future reference: This is set to public for easy coding, but should implement get function.
 	public List<GameServerThread> ClientsInLobby = Collections.synchronizedList(new LinkedList<GameServerThread>());
 	public List<GameRoom> GameRoomsInLobby = Collections.synchronizedList(new LinkedList<GameRoom>());
 
@@ -31,11 +32,11 @@ public class GameLobby {
 	/***********************/
 	
 	// Fetch player in lobby associated with user ID
-	public GameServerThread GetPlayer(int userID) {
+	public GameServerThread GetPlayer(String username) {
 		synchronized (ClientsInLobby) {
 			for(Iterator<GameServerThread> clientItr = ClientsInLobby.listIterator(); clientItr.hasNext();) {
 				GameServerThread client = clientItr.next();
-				if (client.GetUserID() == userID) {
+				if (client.GetUsername().equals(username)) {
 					return client;
 				}
 			}
@@ -47,7 +48,7 @@ public class GameLobby {
 	public void AddPlayer(GameServerThread client) {
 		synchronized(ClientsInLobby) {
 			// check if player is already in lobby 
-			if(GetPlayer(client.GetUserID()) == null) {
+			if(GetPlayer(client.GetUsername()) == null) {
 				ClientsInLobby.add(client);
 			}
 		}
@@ -67,11 +68,11 @@ public class GameLobby {
 	}
 	
 	// Fetch game room in lobby listing associated with player
-	public GameRoom GetGameRoom(int hostUID) {
+	public GameRoom GetGameRoom(String hostName) {
 		synchronized(GameRoomsInLobby) {
 			for(Iterator<GameRoom> gameRoomItr = GameRoomsInLobby.listIterator(); gameRoomItr.hasNext();) {
 				GameRoom gameRoom = gameRoomItr.next();
-				if(gameRoom.hostUID == hostUID) {
+				if(gameRoom.hostName.equals(hostName)) {
 					return gameRoom;
 				}
 			}
@@ -83,19 +84,19 @@ public class GameLobby {
 	public void AddGameRoom(GameServerThread host, String gameName) {
 		synchronized(GameRoomsInLobby) {
 			// check if host already has room
-			if(GetGameRoom(host.GetUserID()) == null) {
-				GameRoom newGameRoom = new GameRoom(host, gameName);
-				GameRoomsInLobby.add(newGameRoom);
+			if(GetGameRoom(host.GetUsername()) == null) {
+				GameRoom gameRoom = new GameRoom(host, gameName);
+				GameRoomsInLobby.add(gameRoom);
 			}
 		}
 	}
 
 	// Remove game room from lobby listing
-	public void RemoveGameRoom(int hostUID) {
+	public void RemoveGameRoom(String hostName) {
 		synchronized(GameRoomsInLobby) {
 			for(Iterator<GameRoom> gameRoomItr = GameRoomsInLobby.listIterator(); gameRoomItr.hasNext();) {
 				GameRoom gameRoom = gameRoomItr.next();
-				if(gameRoom.hostUID == hostUID) {
+				if(gameRoom.hostName.equals(hostName)) {
 					synchronized(gameRoom) {
 						for(Iterator<GameServerThread> clientItr = gameRoom.ClientsInGameRoom.listIterator(); clientItr.hasNext();) {
 							GameServerThread client = clientItr.next();
@@ -107,6 +108,16 @@ public class GameLobby {
 				}
 			}
 		}
+	}
+	
+	// Get number of players in lobby
+	public int GetPlayerCount() {
+		return ClientsInLobby.size();
+	}
+	
+	// Get number of players in lobby
+	public int GetGameRoomCount() {
+		return GameRoomsInLobby.size();
 	}
 
 }

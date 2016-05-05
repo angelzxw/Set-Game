@@ -43,26 +43,67 @@ public class GameLogic {
 	// Check if triplet is a set
     public boolean isSet(Card a, Card b, Card c) {
     	
-    	if( ((a.number == b.number) && (b.number == c.number)) ||
-    		((a.number != b.number) && (b.number != c.number) && (a.number != c.number)) ) {
+		if (!((a.number == b.number) && (b.number == c.number))
+				&& !((a.number != b.number) && (b.number != c.number) && (a.number != c.number))) {
+			return false;
+		}
+
+		if (!((a.symbol == b.symbol) && (b.symbol == c.symbol))
+				&& !((a.symbol != b.symbol) && (b.symbol != c.symbol) && (a.symbol != c.symbol))) {
+			return false;
+		}
+
+		if (!((a.shading == b.shading) && (b.shading == c.shading))
+				&& !((a.shading != b.shading) && (b.shading != c.shading) && (a.shading != c.shading))) {
+			return false;
+		}
+
+		if (!((a.color == b.color) && (b.color == c.color))
+				&& !((a.color != b.color) && (b.color != c.color) && (a.color != c.color))) {
+			return false;
+		}
+		
+    	return true;
+    }
+    
+    // Get positions of one set of cards that form a set on board
+    public ArrayList<Integer> getSetPosition(ArrayList<Card> pool) {
+    	
+    	ArrayList<Integer> setPosList = new ArrayList<Integer>();
+    	
+    	synchronized(pool) {
     		
-    		if( ((a.symbol == b.symbol) && (b.symbol == c.symbol)) ||
-    	    	((a.symbol != b.symbol) && (b.symbol != c.symbol) && (a.symbol != c.symbol)) ) {
-    			
-    			if( ((a.shading == b.shading) && (b.shading == c.shading)) ||
-    	    	    ((a.shading != b.shading) && (b.shading != c.shading) && (a.shading != c.shading)) ) {
-    				
-    				if( ((a.color == b.color) && (b.color == c.color)) ||
-    	    	    	    ((a.color != b.color) && (b.color != c.color) && (a.color != c.color)) ) {
-    					
-    					return true;
-    				}
-    			}
-    		}
+	    	if(pool == null) return setPosList;
+	    	
+	    	int poolSize = pool.size();
+	    	Card noCard = new Card(0,0,0,0);
+	    	
+	    	for(int ia = 0; ia < poolSize; ia++) {
+	    		Card a = pool.get(ia);
+	    		if(a.equals(noCard)) continue; // if no card at position, then go to next card
+	    		
+	    		for(int ib = ia + 1; ib < poolSize; ib++) {
+	    			Card b = pool.get(ib);
+	    			if(b.equals(noCard)) continue;
+	    			
+	    			for(int ic = ib + 1; ic < poolSize; ic++) {
+	    				Card c = pool.get(ic);
+	    				if(c.equals(noCard)) continue;
+	    				
+	    				if(isSet(a, b, c)) {
+	    					setPosList.add(ia);
+	    					setPosList.add(ib);
+	    					setPosList.add(ic);
+	    					break;
+	    				}
+	    			}
+	    		}
+	    	}
     	}
     	
-    	return false;
+    	return setPosList;
     }
+    
     
     // Get possible sets from the playing field or in total
     public ArrayList<ArrayList<Card>> getSets(ArrayList<Card> pool) {
@@ -74,12 +115,20 @@ public class GameLogic {
 	    	if(pool == null) return setList;
 	    	
 	    	int poolSize = pool.size();
+	    	Card noCard = new Card(0,0,0,0);
+	    	
 	    	for(int ia = 0; ia < poolSize; ia++) {
 	    		Card a = pool.get(ia);
+	    		if(a.equals(noCard)) continue; // if no card at position, then go to next card
+	    		
 	    		for(int ib = ia + 1; ib < poolSize; ib++) {
 	    			Card b = pool.get(ib);
+	    			if(b.equals(noCard)) continue;
+	    			
 	    			for(int ic = ib + 1; ic < poolSize; ic++) {
 	    				Card c = pool.get(ic);
+	    				if(c.equals(noCard)) continue;
+	    				
 	    				if(isSet(a, b, c)) {
 	    					ArrayList<Card> set = new ArrayList<Card>();
 	    					set.add(a);

@@ -34,7 +34,7 @@ public class GameServer {
 	// Note: The engine and server are common to all instances of the server
 	public static GameServer gameServer;
 	public static GameEngine gameEngine;
-	 
+	
 	private List<GameServerThread> ClientList = Collections.synchronizedList(new LinkedList<GameServerThread>());
 	
 	/***********************/
@@ -49,6 +49,7 @@ public class GameServer {
 	/****************************/
 
 	public GameServer(int portNumber) {
+		gameServer = this;
 		StartGameEngine();
 		StartServer(portNumber);
 		ServerListening();
@@ -80,12 +81,14 @@ public class GameServer {
 	// Listen for clients
 	public void ServerListening() {
 		
+		System.out.println("GameServer: ~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		System.out.println("GameServer: Listening for clients...");
 		
 		while(ServerOn) {
 			try {
 				Socket clientSocket = serverSocket.accept(); // listen for connection, then accept it
 				AddClient(clientSocket);
+				System.out.println("GameServer: ~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 				System.out.println("GameServer: Accepted client at address " + clientSocket.getInetAddress());
 				System.out.println("GameServer: Number of clients: " + GetClientCount());
 			} catch(Exception e) {
@@ -116,28 +119,48 @@ public class GameServer {
 	/** Methods for client managing **/
 	/*********************************/
 	
-	// Add client socket to server and start it
-	public void AddClient(Socket cSocket) {
-		 GameServerThread NewClient = new GameServerThread(cSocket);
-		 ClientList.add(NewClient);
-		 NewClient.start();
-	}
-	
-	// Remove client socket from server
-	public void DeleteClient(GameServerThread client) {
+	// Get client
+	public GameServerThread GetClient(int userID) {
 		synchronized(ClientList) {
-			for(Iterator<GameServerThread> itr = ClientList.listIterator(0); itr.hasNext();) {
-				if (client == itr.next()) {
-					client.Close();
-					itr.remove();
+			for(Iterator<GameServerThread> clientItr = ClientList.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				if (client.GetUserID() == userID) {
+					return client;
 				}
 			}
 		}
+		return null;
 	}
 	
-	// Get client
-	public GameServerThread GetClient() {
-		return null;
+	// Add client socket to server and start it
+	public void AddClient(Socket cSocket) {
+		synchronized(ClientList) {
+			
+			 GameServerThread client = new GameServerThread(cSocket);
+			 ClientList.add(client);
+			 
+			// Temporarily use number of client as its user ID
+			// for debugging with no database
+			//client.SetUserID(ClientList.size());
+			//client.SetUsername("Player " + client.GetUserID());
+			System.out.println("GameServer: " + client.GetUsername() + " wants to join.");
+			
+			client.start();
+		}
+	}
+	
+	// Remove client socket from server
+	public void DeleteClient(GameServerThread targetClient) {
+		synchronized(ClientList) {
+			for(Iterator<GameServerThread> clientItr = ClientList.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				if (client == targetClient) {
+					client.Close();
+					clientItr.remove();
+				}
+			}
+		}
+		System.out.println("GameServer: Client closed.");
 	}
 	
 	// Get number of clients
@@ -145,11 +168,71 @@ public class GameServer {
 		return ClientList.size();
 	}
 
+	/****************************************/
+	/** Packet broadcasting to all clients **/
+	/****************************************/
+	
+	/********************/
+	/** Lobby updating **/
+	/********************/
+	
+	public void BroadcastLobbyUpdateAddPlayer(String username) {
+		synchronized(ClientList) {
+			for(Iterator<GameServerThread> clientItr = ClientList.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				client.sendPacket.LobbyUpdateAddPlayer(username);
+			}
+		}
+	}
+	
+	public void BroadcastLobbyUpdateRemovePlayer(String username) {
+		synchronized(ClientList) {
+			for(Iterator<GameServerThread> clientItr = ClientList.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				client.sendPacket.LobbyUpdateRemovePlayer(username);
+			}
+		}
+	}
+	
+	public void BroadcastLobbyUpdateAddGame(String gameName, String username) {
+		synchronized(ClientList) {
+			for(Iterator<GameServerThread> clientItr = ClientList.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				client.sendPacket.LobbyUpdateAddGame(gameName, username);
+			}
+		}
+	}
+	
+	public void BroadcastLobbyUpdateRemoveGame(String gameName, String username) {
+		synchronized(ClientList) {
+			for(Iterator<GameServerThread> clientItr = ClientList.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				client.sendPacket.LobbyUpdateRemoveGame(gameName, username);
+			}
+		}
+	}
+	
+	
+	/**************/
+	/** Chatting **/
+	/**************/
+	
+	public void BroadcastChatInLobby(String message) {
+		synchronized(ClientList) {
+			for(Iterator<GameServerThread> clientItr = ClientList.listIterator(); clientItr.hasNext();) {
+				GameServerThread client = clientItr.next();
+				client.sendPacket.ChatMessageInLobby(message);
+			}
+		}
+	}
+
 	/*********************/
 	/** GameServer main **/
 	/*********************/
 
     public static void main(String[] args) throws Exception {
+    	
+    	//GameServer.gameServer.CloseServer();
     	
     	/*
         if (args.length != 1) {
@@ -160,7 +243,9 @@ public class GameServer {
     	
     	//int portNumber = Integer.parseInt(args[0]);
     	int portNumber = 8901;
-    	gameServer = new GameServer(portNumber);
+    	GameServer gameServer = new GameServer(portNumber);
+    	
+
     }
     
 }

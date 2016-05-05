@@ -13,6 +13,8 @@ Welcome, <B><I> <%=session.getAttribute("userid")%></I></B>
 <br/>
 <a href='accountRM.jsp'>Remove Your Account From The System</a>
 <br/>
+<a href='unlock.jsp'>Unlock Your Account</a>
+<br/>
 <a href="tutorial.jsp">Watch Game Tutorial Here</a>
 <br/>
 <a href="search.jsp">Search Player</a>

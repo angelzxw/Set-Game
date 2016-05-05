@@ -80,7 +80,6 @@ public class GamePlayer {
 	public void SaveStats() {
 	}
 
-	
 	// Executes whenever player enters game lobby
 	public void EnterGameLobby() {
 		GameEngine.gameLobby.AddPlayer(client);
@@ -89,22 +88,21 @@ public class GamePlayer {
 		gameState = GameState.LOBBY;
 	}
 	
-	
 	// Executes whenever player creates game room
 	public void CreateGameRoom(String gameName) {
 		// can only create room when you're in lobby
 		if(gameState == GameState.LOBBY) {
 			GameEngine.gameLobby.AddGameRoom(client, gameName);
-			JoinGameRoom(userID); // changes stage
+			JoinGameRoom(username); // changes state
 			gameRoom.host = client; // change host of game room to client
 		}
 	}
 		
 	// Executes whenever player joins game room
-	public void JoinGameRoom(int hostUID) {
+	public void JoinGameRoom(String hostName) {
 		// can only join room when you're in lobby
 		if(gameState == GameState.LOBBY) {
-			gameRoom = GameEngine.gameLobby.GetGameRoom(hostUID);
+			gameRoom = GameEngine.gameLobby.GetGameRoom(hostName);
 			// join if game exists and hasn't started
 			if(gameRoom != null) {
 				GameEngine.gameLobby.RemovePlayer(client);
@@ -121,18 +119,18 @@ public class GamePlayer {
 			if(gameRoom != null) {
 				gameRoom.RemovePlayer(client);
 				// delete game if player is host
-				if(userID == gameRoom.hostUID) {
-					GameEngine.gameLobby.RemoveGameRoom(userID);
+				if(gameRoom.hostName.equals(username)) {
+					GameEngine.gameLobby.RemoveGameRoom(username);
 				}
 			}
 		}
 	}
 	
 	// Executes whenever player joins game
-	public void JoinGame(int hostUID) {
+	public void JoinGame(String hostName) {
 		// can only join game when you're in room
 		if(gameState == GameState.ROOM) {
-			game = GameEngine.gameManager.GetGame(hostUID);
+			game = GameEngine.gameManager.GetGame(hostName);
 			if(game != null) {
 				game.AddPlayer(client);
 				score = 0;
@@ -148,8 +146,8 @@ public class GamePlayer {
 			if(game != null) {
 				game.RemovePlayer(client);
 				// delete game if player is host
-				if(userID == game.hostUID) {
-					GameEngine.gameManager.RemoveGame(userID);
+				if(game.hostName.equals(username)) {
+					GameEngine.gameManager.RemoveGame(username);
 				}
 			}
 		}

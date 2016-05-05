@@ -50,8 +50,14 @@
                     </tr>
                     
                     <tr>
+                        <td colspan="2"><a href='unlock.jsp'>Unlock Your Account</a></td>
+                    </tr>
+                    
+                    <tr>
                         <td colspan="2"><a href="tutorial.jsp">Watch Game Tutorial Here</a></td>
                     </tr>
+                    
+                    
                     <tr>
                         <td colspan="2"><a href="search.jsp">Search Player</a></td>
                     </tr>
